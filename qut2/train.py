@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 from torchvision import datasets, transforms
 from dataload import data_load
-from Rnn import Rnn
+from Rnn_new import Rnn
 from utils import AverageMeter,accuracy,val,save_checkpoint,load_checkpoint
 
 
@@ -12,13 +12,13 @@ train_loader,val_loader=data_load()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 max_epoch=20
 resume=False
-
-model=Rnn(28,20,10,0)
+torch.autograd.set_detect_anomaly(True)
+model=Rnn(28,20,10,1)
 optimer=torch.optim.Adam(model.parameters(),0.01)
 lost_fun=nn.CrossEntropyLoss()
 epoch=0
 if(resume==True):
-    state=load_checkpoint('ckpt')
+    state=load_checkpoint('ckpt2')
     epoch = state["epoch"] + 1
 
     model.load_state_dict(state["model"])
@@ -34,7 +34,7 @@ while epoch<max_epoch:
         y=y.to(device)
         optimer.zero_grad()
 
-        hid = torch.zeros(32, 1, 20)
+        hid = torch.zeros(32,3,20)
         hid=hid.to(device)
         pred=model(image,hid)
 
@@ -55,5 +55,5 @@ while epoch<max_epoch:
             'epoch':epoch,
             'model':model.state_dict()
         }
-        save_checkpoint(state,'ckpt')
+        save_checkpoint(state,'ckpt2')
     epoch+=1

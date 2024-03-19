@@ -17,8 +17,8 @@ def data_load():
         transforms.ToTensor(),
         transforms.Normalize((0.5,), (0.5,))
     ])
-    train_dataset = datasets.FashionMNIST(root="../data/fashion-mnist", train=True, transform=transform, download=True)
-    test_dataset = datasets.FashionMNIST(root="../data/fashion-mnist", train=False, transform=transform_val, download=True)
+    train_dataset = datasets.MNIST(root="../data/mnist", train=True, transform=transform, download=True)
+    test_dataset = datasets.MNIST(root="../data/mnist", train=False, transform=transform_val, download=True)
 
     train_loader=DataLoader(train_dataset,32,True,drop_last=True)
     val_loader=DataLoader(test_dataset,32,True,drop_last=True)
